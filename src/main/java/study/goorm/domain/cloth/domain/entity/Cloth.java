@@ -10,7 +10,7 @@ import study.goorm.domain.member.domain.entity.Member;
 import study.goorm.domain.model.entity.BaseEntity;
 import study.goorm.domain.model.enums.Season;
 import study.goorm.domain.model.enums.ThicknessLevel;
-
+//dddd
 import java.util.List;
 
 @Entity
