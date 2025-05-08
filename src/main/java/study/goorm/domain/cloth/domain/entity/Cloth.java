@@ -13,7 +13,7 @@ import study.goorm.domain.model.enums.ThicknessLevel;
 
 import java.util.List;
 
-@Entity
+
 @Getter
 @Builder
 @DynamicUpdate
