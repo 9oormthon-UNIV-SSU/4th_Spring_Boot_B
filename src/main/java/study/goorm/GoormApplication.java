@@ -9,5 +9,5 @@ public class GoormApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GoormApplication.class, args);
 	}
-
+	// 연습중입니다.
 }
