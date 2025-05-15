@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import study.goorm.global.error.code.BaseCode;
+import study.goorm.global.error.code.ReasonDTO;
 
 @Getter
 @AllArgsConstructor
@@ -25,5 +26,16 @@ public enum SuccessStatus implements BaseCode {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public ReasonDTO getReasonHttpStatus() {
+        return ReasonDTO.builder()
+                .message(message)
+                .code(code)
+                .isSuccess(true)
+                .httpStatus(httpStatus)
+                .build();
+    }
 }
+
 
