@@ -27,10 +27,11 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),
-    PAGE_SIZE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4002","페이지 사이즈는 1이상으로 입력해야합니다.");
+    PAGE_SIZE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4002","페이지 사이즈는 1이상으로 입력해야합니다."),
 
+    NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST,"CLOTH_4003","카테고리가 존재하지 않습니다."),
 
-
+    LOWER_TEMP_BIGGER_THAN_UPPER_TEMP(HttpStatus.BAD_REQUEST,"CLOTH_4004","옷의 하한 온도가 상한 온도 보다 높습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;

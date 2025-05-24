@@ -4,10 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import study.goorm.domain.cloth.application.ClothService;
+import study.goorm.domain.cloth.dto.ClothRequestDTO;
 import study.goorm.domain.cloth.dto.ClothResponseDTO;
 import study.goorm.domain.model.enums.ClothSort;
 import study.goorm.domain.model.exception.annotation.CheckPage;
@@ -59,6 +63,23 @@ public class ClothRestController {
         return BaseResponse.onSuccess(SuccessStatus.CLOTH_VIEW_SUCCESS,result);
 
     }
+
+
+
+    @PostMapping(value = "",consumes= MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "새로운 옷을 생성하는 API", description = "request body에 ClothCreateRequest 형식의 데이터를 전달해주세요.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "CLOTH_201",description = "CREATED,성공적으로 생성되었습니다."),
+
+    })
+    public BaseResponse<ClothResponseDTO.ClothCreateResult> createCloth(
+            @RequestPart("clothCreateRequest") @Valid ClothRequestDTO.ClothCreateRequest clothCreateRequest,
+            @RequestPart("imageFile") MultipartFile imageFile
+            ){
+        ClothResponseDTO.ClothCreateResult result=clothService.createCloth(clothCreateRequest,imageFile);
+        return BaseResponse.onSuccess(SuccessStatus.CLOTH_CREATED,result);
+    }
+
 
 
 }

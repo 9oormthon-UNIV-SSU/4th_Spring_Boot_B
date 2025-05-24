@@ -77,7 +77,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
             WebRequest request) {
 
         Map<String, String> errors = new LinkedHashMap<>();
-
+        //필드에러처리
         e.getBindingResult().getFieldErrors().stream()
                 .forEach(
                         fieldError -> {
@@ -94,6 +94,18 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
                                     (existingErrorMessage, newErrorMessage) ->
                                             existingErrorMessage + ", " + newErrorMessage);
                         });
+        //클래스 레벨 에러 처리(ObjectError)
+        e.getBindingResult().getGlobalErrors().forEach(objectError ->{
+            String objectName=objectError.getObjectName();
+            String errorMessage;
+            try{
+                errorMessage = Optional.ofNullable(ErrorStatus.valueOf(objectError.getDefaultMessage()).getMessage()).orElse("");
+            } catch (IllegalArgumentException ex) {
+                errorMessage = Optional.ofNullable(ErrorStatus.valueOf(objectError.getDefaultMessage()).getMessage()).orElse("");
+            }
+            errors.merge("message :",errorMessage,
+                    (existingErrorMessage, newErrorMessage) ->existingErrorMessage+ ", " + newErrorMessage);
+        } );
 
         return handleExceptionInternalArgs(
                 e, HttpHeaders.EMPTY, ErrorStatus.valueOf("_BAD_REQUEST"), request, errors);
