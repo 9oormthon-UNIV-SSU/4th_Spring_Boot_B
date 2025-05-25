@@ -17,30 +17,31 @@ import study.goorm.domain.model.entity.BaseEntity;
 @AllArgsConstructor
 public class Member extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false)
     private String email;
 
-    @Column(length = 50, unique = true)
-    private String clokeyId;
-
-    @Column(length = 20)
+    @Column(length = 30)
     private String nickname;
 
-    @Enumerated(EnumType.STRING)
+    @Column(unique = true)
+    private String clokeyId;
+
+    @Column(length = 100) //한줄 소개
+    private String bio;
+
+    @Enumerated(EnumType.STRING) //가입종류
     @Column(nullable = false)
     private SocialType socialType;
 
-    private String profileUrl;
+    private String profileImageUrl;
 
-    private String profileBackUrl;
+    private String profileBackImageUrl;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) //활성화여부
     @Column(columnDefinition = "VARCHAR(15) DEFAULT 'ACTIVE'", nullable = false)
     private MemberStatus status;
-
-    @Column(length = 50)
-    private String bio;
 }

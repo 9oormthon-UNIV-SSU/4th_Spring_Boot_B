@@ -4,4 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import study.goorm.domain.member.domain.entity.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByClokeyId(String clokeyId);
 }

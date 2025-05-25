@@ -10,11 +10,11 @@ import study.goorm.domain.model.entity.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Term extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
-
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
