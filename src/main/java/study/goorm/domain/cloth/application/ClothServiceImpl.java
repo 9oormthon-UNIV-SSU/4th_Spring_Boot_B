@@ -1,6 +1,8 @@
 package study.goorm.domain.cloth.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.goorm.domain.cloth.converter.ClothConverter;
@@ -10,9 +12,14 @@ import study.goorm.domain.cloth.domain.repository.ClothImageRepository;
 import study.goorm.domain.cloth.domain.repository.ClothRepository;
 import study.goorm.domain.cloth.dto.ClothResponseDTO;
 import study.goorm.domain.cloth.exception.ClothException;
+import study.goorm.domain.member.domain.entity.Member;
+import study.goorm.domain.member.domain.repository.MemberRepository;
+import study.goorm.domain.member.exception.MemberException;
+import study.goorm.domain.model.Enum.ClothSort;
 import study.goorm.global.error.code.status.ErrorStatus;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +27,8 @@ public class ClothServiceImpl implements ClothService {
 
     private final ClothRepository clothRepository;
     private final ClothImageRepository clothImageRepository;
+    private final MemberRepository memberRepository;
+    private final ClothImageQueryService clothImageQueryService;
 
     @Override
     @Transactional(readOnly = true)
@@ -35,5 +44,29 @@ public class ClothServiceImpl implements ClothService {
                 .orElseThrow(() -> new ClothException(ErrorStatus.NO_ClOTH_IMAGE));
 
         return ClothConverter.toClothEditViewDTO(cloth, firstImageUrl);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ClothResponseDTO.MemberClosetDTO getMemberCloset(String clokeyId, ClothSort sort, int page, int size) {
+        Member member = memberRepository.findByClokeyId(clokeyId)
+                .orElseThrow(()-> new MemberException(ErrorStatus.NO_SUCH_MEMBER));
+        PageRequest pageRequest = PageRequest.of(page,size);
+
+        Page<Cloth> clothes;
+
+        if (sort.equals(ClothSort.LATEST)){
+            clothes = clothRepository.findByMemberOrderByCreatedAtDesc(member, pageRequest);
+        }else if(sort.equals(ClothSort.OLDEST)){
+            clothes = clothRepository.findByMemberOrderByCreatedAtAsc(member,pageRequest);
+        }else if(sort.equals(ClothSort.WEAR)){
+            clothes = clothRepository.findByMemberOrderByWearNumberDesc(member,pageRequest);
+        }else {
+            clothes = clothRepository.findByMemberOrderByWearNumberAsc(member,pageRequest);
+        }
+
+        Map<Long, String> firstImagesOfCloth = clothImageQueryService.getFirstImageUrlMap(clothes);
+
+        return ClothConverter.toMemberClosetDTO(member,firstImagesOfCloth,clothes);
     }
 }
