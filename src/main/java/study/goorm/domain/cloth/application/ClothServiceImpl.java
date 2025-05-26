@@ -16,6 +16,8 @@ import study.goorm.domain.cloth.domain.repository.ClothRepository;
 import study.goorm.domain.cloth.dto.ClothRequestDTO;
 import study.goorm.domain.cloth.dto.ClothResponseDTO;
 import study.goorm.domain.cloth.exception.ClothException;
+import study.goorm.domain.folder.domain.repository.ClothFolderRepository;
+import study.goorm.domain.history.domain.repository.HistoryClothRepository;
 import study.goorm.domain.member.domain.entity.Member;
 import study.goorm.domain.member.domain.repository.MemberRepository;
 import study.goorm.domain.member.exception.MemberException;
@@ -33,6 +35,8 @@ public class ClothServiceImpl implements ClothService {
     private final ClothImageRepository clothImageRepository;
     private final MemberRepository memberRepository;
     private final CategoryRepository categoryRepository;
+    private final ClothFolderRepository clothFolderRepository;
+    private final HistoryClothRepository historyClothRepository;
     private final ClothImageQueryService clothImageQueryService;
 
     @Override
@@ -108,5 +112,21 @@ public class ClothServiceImpl implements ClothService {
 
         return ClothConverter.toClothCreateDTO(newCloth);
 
+    }
+
+    @Override
+    @Transactional
+    public void deleteCloth(Long clothId) {
+
+        Cloth cloth = clothRepository.findById(clothId)
+                .orElseThrow(()-> new ClothException(ErrorStatus.NO_SUCH_CLOTH));
+
+        //매핑 테이블 삭제
+        clothImageRepository.deleteAllByCloth(cloth);
+        clothFolderRepository.deleteAllByCloth(cloth);
+        historyClothRepository.deleteAllByCloth(cloth);
+
+        //최종 옷 삭제
+        clothRepository.delete(cloth);
     }
 }
