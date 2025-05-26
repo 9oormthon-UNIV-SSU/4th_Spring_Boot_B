@@ -47,7 +47,7 @@ public class Cloth extends BaseEntity {
     @Column(nullable = false)
     private ThicknessLevel thicknessLevel;
 
-    private String ClothUrl;
+    private String clothUrl;
 
     @Column(length = 50)
     private String brand;

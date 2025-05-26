@@ -53,4 +53,10 @@ public class ClothConverter {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    public static ClothResponseDTO.ClothCreateDTO toClothCreateDTO(Cloth cloth){
+        return ClothResponseDTO.ClothCreateDTO.builder()
+                .id(cloth.getId())
+                .build();
+    }
 }

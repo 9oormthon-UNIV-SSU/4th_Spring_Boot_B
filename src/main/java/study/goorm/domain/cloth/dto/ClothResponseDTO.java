@@ -60,4 +60,12 @@ public class ClothResponseDTO {
         private int wearNum;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ClothCreateDTO {
+        private Long id;
+    }
+
 }
