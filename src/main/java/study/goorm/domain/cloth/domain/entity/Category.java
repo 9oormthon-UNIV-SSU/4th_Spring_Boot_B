@@ -11,13 +11,15 @@ import study.goorm.domain.model.entity.BaseEntity;
 @AllArgsConstructor
 public class Category extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(nullable = false, length = 50, name = "category_name")
-    private String categoryName;
+    @Column(nullable = false, length = 50)
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_category_id", nullable = false)
-    private Category category;
+    @JoinColumn(name = "parent_id") // 부모 카테고리
+    private Category parent;
+
 }
