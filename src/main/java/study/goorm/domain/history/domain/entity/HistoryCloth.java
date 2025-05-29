@@ -12,14 +12,15 @@ import study.goorm.domain.model.entity.BaseEntity;
 @AllArgsConstructor
 public class HistoryCloth extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "history_id", nullable = false)
     private History history;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clothes_id", nullable = false)
+    @JoinColumn(name = "cloth_id", nullable = false)
     private Cloth cloth;
 }

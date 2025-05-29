@@ -12,14 +12,16 @@ import study.goorm.domain.model.entity.BaseEntity;
 @AllArgsConstructor
 public class ClothFolder extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cloth_id", nullable = false)
+    @JoinColumn(name = "cloth_id",nullable = false)
     private Cloth cloth;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "folder_id", nullable = false)
+    @JoinColumn(name = "folder_id",nullable = false)
     private Folder folder;
 }
+
