@@ -27,6 +27,11 @@ public enum ErrorStatus implements BaseErrorCode {
     //Category
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST, "CLOTH_4003", "카테고리가 존재하지 않습니다."),
 
+    // History
+    NO_SUCH_HISTORY_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER_4003", "존재하지 않는 멤버 ID 입니다."),
+    INVALID_HISTORY_DATE_FORMAT(HttpStatus.BAD_REQUEST, "HISTORY_4001", "잘못된 날짜 형식입니다."),
+    HISTORY_ACCESS_DENIED(HttpStatus.BAD_REQUEST, "HISTORY_4006", "기록에 접근 권한이 없습니다."),
+
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),
     PAGE_SIZE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4002","페이지 사이즈는 1이상으로 입력해야 합니다.");
