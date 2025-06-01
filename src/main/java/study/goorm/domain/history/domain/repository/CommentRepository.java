@@ -1,4 +1,9 @@
 package study.goorm.domain.history.domain.repository;
 
-public interface CommentRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import study.goorm.domain.history.domain.entity.Comment;
+
+public interface CommentRepository extends JpaRepository<Comment, Long> {
+
+    void deleteAllByHistoryId(Long historyId);
 }

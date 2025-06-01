@@ -24,4 +24,6 @@ public interface ClothRepository extends JpaRepository<Cloth, Long> {
 
     // 4. createdAt 내림차순
     Page<Cloth> findByMemberOrderByCreatedAtDesc(Member member, Pageable pageable);
+
+    List<Cloth> findAllByIdInAndMemberId(List<Long> clothIds, Long memberId);
 }

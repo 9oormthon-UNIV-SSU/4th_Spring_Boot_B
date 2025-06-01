@@ -7,6 +7,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import study.goorm.domain.member.domain.entity.Member;
 import study.goorm.domain.model.entity.BaseEntity;
+import study.goorm.domain.model.enums.Visibility;
 
 import java.time.LocalDate;
 
@@ -37,4 +38,17 @@ public class History extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, nullable = false, columnDefinition = "varchar(20) default 'PUBLIC'")
+    private Visibility visibility; // PUBLIC 또는 PRIVATE
+
+    public void updateHistory(String content, Visibility visibility) {
+        if (content != null && !content.trim().isEmpty()) {
+            this.content = content.trim();
+        }
+
+        if (visibility != null) {
+            this.visibility = visibility;
+        }
+    }
 }

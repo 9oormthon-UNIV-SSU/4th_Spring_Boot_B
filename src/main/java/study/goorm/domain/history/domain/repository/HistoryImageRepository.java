@@ -1,4 +1,9 @@
 package study.goorm.domain.history.domain.repository;
 
-public interface HistoryImageRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import study.goorm.domain.history.domain.entity.HistoryImage;
+
+public interface HistoryImageRepository extends JpaRepository<HistoryImage, Long> {
+
+    void deleteAllByHistoryId(Long historyId);
 }
