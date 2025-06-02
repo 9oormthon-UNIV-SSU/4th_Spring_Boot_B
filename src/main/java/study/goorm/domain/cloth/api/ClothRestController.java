@@ -80,6 +80,16 @@ public class ClothRestController {
         return BaseResponse.onSuccess(SuccessStatus.CLOTH_CREATED,result);
     }
 
+    @DeleteMapping("/{cloth-id}")
+    @Operation(summary = "특정 옷을 삭제하는 API",description = "path variable로 cloth_id를 넘겨주세요.")
+    @Parameters({@Parameter(name = "cloth-id",description = "옷의 id,path variable입니다.")})
+    public BaseResponse<Void> deleteCloth (
+    @PathVariable(value="cloth-id") Long clothId
+    ){
+        clothService.deleteCloth(clothId);
+        return BaseResponse.onSuccess(SuccessStatus.CLOTH_DELETED,null);
+    }
+
 
 
 }

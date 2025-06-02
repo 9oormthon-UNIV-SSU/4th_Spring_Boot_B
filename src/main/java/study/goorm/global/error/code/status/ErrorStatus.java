@@ -31,7 +31,14 @@ public enum ErrorStatus implements BaseErrorCode {
 
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST,"CLOTH_4003","카테고리가 존재하지 않습니다."),
 
-    LOWER_TEMP_BIGGER_THAN_UPPER_TEMP(HttpStatus.BAD_REQUEST,"CLOTH_4004","옷의 하한 온도가 상한 온도 보다 높습니다.");
+    LOWER_TEMP_BIGGER_THAN_UPPER_TEMP(HttpStatus.BAD_REQUEST,"CLOTH_4004","옷의 하한 온도가 상한 온도 보다 높습니다."),
+
+
+    //History
+    NO_SUCH_HISTORY(HttpStatus.NOT_FOUND, "HISTORY_4002","존재하지 않는 기록ID입니다"),
+
+    NO_AUTHORITY_HISTORY(HttpStatus.FORBIDDEN,"HISTORY_4006","기록에 접근 권한이 없습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String code;

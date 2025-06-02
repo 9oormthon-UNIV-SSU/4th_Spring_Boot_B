@@ -9,7 +9,7 @@ import study.goorm.domain.cloth.domain.entity.ClothImage;
 import java.util.List;
 
 public interface ClothImageRepository extends JpaRepository<ClothImage, Long> {
-
+    void deleteAllByCloth(Cloth cloth);
     List<ClothImage> findAllByCloth(Cloth cloth);
 
     @Query(value = """
