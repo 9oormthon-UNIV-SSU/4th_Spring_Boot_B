@@ -20,4 +20,15 @@ public class HistoryRequestDTO {
         private List<String> hashtags;
         private LocalDate date;
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateHistoryDTO {
+        private String content;
+        private List<Long> clothes;
+        private List<String> hashtags;
+        private String visibility; // ENUM 형태일 경우 타입 맞춰주세요
+    }
 }

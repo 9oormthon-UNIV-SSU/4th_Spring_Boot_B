@@ -77,5 +77,27 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_CREATED, result);
     }
 
+    @PatchMapping(value = "/{historyId}", consumes = "multipart/form-data")
+    @Operation(
+            summary = "날짜별 옷 기록 수정 API",
+            description = "특정 날짜의 기록을 수정합니다. 이미지와 metadata를 multipart/form-data 형식으로 받습니다."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "기록이 성공적으로 수정되었습니다."),
+            @ApiResponse(responseCode = "400", description = "유효하지 않은 요청입니다."),
+            @ApiResponse(responseCode = "403", description = "타인의 기록을 수정할 수 없습니다."),
+            @ApiResponse(responseCode = "404", description = "해당 기록 또는 옷을 찾을 수 없습니다."),
+            @ApiResponse(responseCode = "500", description = "서버 내부 오류가 발생했습니다.")
+    })
+    public BaseResponse<Void> updateHistory(
+            @Parameter(description = "수정할 기록 ID") @PathVariable Long historyId,
+            @RequestPart("metadata") @Valid HistoryRequestDTO.UpdateHistoryDTO requestDTO,
+            @RequestPart("imageFile") List<MultipartFile> imageFiles
+    ) {
+        historyService.updateHistory(historyId, requestDTO, imageFiles);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_UPDATED, null);
+    }
+
+
 
 }

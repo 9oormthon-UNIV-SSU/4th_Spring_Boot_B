@@ -153,4 +153,74 @@ public class HistoryServiceImpl implements HistoryService {
 
         return HistoryConverter.toCreateHistoryResultDTO(history);
     }
+
+    @Override
+    @Transactional
+    public void updateHistory(Long historyId, HistoryRequestDTO.UpdateHistoryDTO requestDTO, List<MultipartFile> imageFiles) {
+        History history = historyRepository.findByIdWithMember(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
+        if (!history.getMember().getId().equals(member.getId())) {
+            throw new HistoryException(ErrorStatus.HISTORY_ACCESS_DENIED);
+        }
+
+        if (requestDTO.getContent() != null && requestDTO.getContent().length() > 200) {
+            throw new HistoryException(ErrorStatus.CONTENT_LENGTH_EXCEEDED);
+        }
+
+        if (imageFiles != null && imageFiles.size() > 10) {
+            throw new HistoryException(ErrorStatus.TOO_MANY_IMAGES);
+        }
+
+        historyImageRepository.deleteAllByHistoryId(historyId);
+        if (imageFiles != null && !imageFiles.isEmpty()) {
+            for (MultipartFile file : imageFiles) {
+                String url = minioUploader.uploadImage(file);
+                historyImageRepository.save(HistoryImage.builder()
+                        .history(history)
+                        .url(url)
+                        .build());
+            }
+        } else {
+            throw new HistoryException(ErrorStatus.EMPTY_HISTORY_IMAGE);
+        }
+
+        historyClothRepository.deleteAllByHistoryId(historyId);
+        List<Long> clothes = requestDTO.getClothes();
+        if (clothes.size() != clothes.stream().distinct().count()) {
+            throw new HistoryException(ErrorStatus.DUPLICATE_CLOTH);
+        }
+        for (Long clothId : clothes) {
+            Cloth cloth = clothRepository.findById(clothId)
+                    .orElseThrow(() -> new HistoryException(ErrorStatus.INVALID_CLOTH_ID));
+            if (!cloth.getMember().getId().equals(member.getId())) {
+                throw new HistoryException(ErrorStatus.INVALID_CLOTH_ID);
+            }
+            cloth.increaseWearCount();
+            historyClothRepository.save(HistoryCloth.builder()
+                    .history(history)
+                    .cloth(cloth)
+                    .build());
+        }
+
+        hashtagHistoryRepository.deleteAllByHistoryId(historyId);
+        List<String> hashtags = requestDTO.getHashtags();
+        if (hashtags != null && !hashtags.isEmpty()) {
+            if (hashtags.size() != hashtags.stream().distinct().count()) {
+                throw new HistoryException(ErrorStatus.DUPLICATE_HASHTAG);
+            }
+            for (String tag : hashtags) {
+                Hashtag hashtag = hashtagRepository.findByName(tag)
+                        .orElseGet(() -> hashtagRepository.save(Hashtag.builder().name(tag).build()));
+                hashtagHistoryRepository.save(HashtagHistory.builder()
+                        .history(history)
+                        .hashtag(hashtag)
+                        .build());
+            }
+        }
+
+        history.updateContent(requestDTO.getContent());
+    }
 }

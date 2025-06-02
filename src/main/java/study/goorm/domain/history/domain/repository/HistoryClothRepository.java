@@ -9,4 +9,5 @@ import java.util.List;
 public interface HistoryClothRepository extends JpaRepository<HistoryCloth, Long> {
     void deleteAllByCloth(Cloth cloth);
     List<HistoryCloth> findAllByHistoryId(Long historyId);
+    void deleteAllByHistoryId(Long historyId);
 }

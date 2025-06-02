@@ -37,9 +37,8 @@ public enum ErrorStatus implements BaseErrorCode {
     DUPLICATE_CLOTH(HttpStatus.BAD_REQUEST, "HISTORY_4005", "등록된 옷 목록에 중복 항목이 있습니다."),
     INVALID_CLOTH_ID(HttpStatus.BAD_REQUEST, "HISTORY_4007", "존재하지 않거나 소유하지 않은 옷 ID입니다."),
     DUPLICATE_HASHTAG(HttpStatus.BAD_REQUEST, "HISTORY_4008", "해시태그 목록에 중복 항목이 있습니다."),
-
-
-
+    CONTENT_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "HISTORY_4009", "내용은 200자를 초과할 수 없습니다."),
+    TOO_MANY_IMAGES(HttpStatus.BAD_REQUEST, "HISTORY_4010", "이미지는 최대 10장까지만 업로드할 수 있습니다."),
 
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),

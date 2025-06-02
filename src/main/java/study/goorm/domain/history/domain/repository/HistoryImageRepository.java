@@ -14,4 +14,5 @@ public interface HistoryImageRepository extends JpaRepository<HistoryImage, Long
             "    SELECT MIN(hii.id) FROM HistoryImage hii WHERE hii.history.id IN :historyIds GROUP BY hii.history.id" +
             ")")
     List<HistoryImage> findFirstImagesByHistoryIds(@Param("historyIds") List<Long> historyIds);
+    void deleteAllByHistoryId(Long historyId);
 }
