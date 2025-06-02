@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import study.goorm.domain.cloth.dto.ClothRequestDTO;
 import study.goorm.domain.member.domain.entity.Member;
 import study.goorm.domain.model.entity.BaseEntity;
 import study.goorm.domain.model.enums.Season;
@@ -64,4 +65,56 @@ public class Cloth extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    public void updatePartially(ClothRequestDTO.ClothUpdateRequest request, Category category) {
+        // 옷 이름 업데이트
+        if (request.getName() != null && !request.getName().trim().isEmpty()) {
+            this.name = request.getName().trim();
+        }
+
+        // 브랜드 업데이트
+        if (request.getBrand() != null && !request.getBrand().trim().isEmpty()) {
+            this.brand = request.getBrand().trim();
+        }
+
+        // 상한 온도 업데이트
+        if (request.getTempUpperBound() != null) {
+            this.tempUpperBound = request.getTempUpperBound();
+        }
+
+        // 하한 온도 업데이트
+        if (request.getTempLowerBound() != null) {
+            this.tempLowerBound = request.getTempLowerBound();
+        }
+
+        // 두께 레벨 업데이트
+        if (request.getThicknessLevel() != null) {
+            this.thicknessLevel = request.getThicknessLevel();
+        }
+
+        // 옷 URL 업데이트
+        if (request.getClothUrl() != null && !request.getClothUrl().trim().isEmpty()) {
+            this.clothUrl = request.getClothUrl().trim();
+        }
+
+        // 카테고리 업데이트
+        if (category != null) {
+            this.category = category;
+        }
+
+        // 계절 정보 업데이트
+        if (request.getSeasons() != null && !request.getSeasons().isEmpty()) {
+            this.season = request.getSeasons();
+        }
+    }
+
+    public void increaseWearNum() {
+        this.wearNum++;
+    }
+
+    public void decreaseWearNum() {
+        if (this.wearNum > 0) {
+            this.wearNum--;
+        }
+    }
 }

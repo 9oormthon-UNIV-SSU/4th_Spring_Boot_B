@@ -1,4 +1,9 @@
 package study.goorm.domain.history.domain.repository;
 
-public interface HashtagHistoryRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import study.goorm.domain.history.domain.entity.HashtagHistory;
+
+public interface HashtagHistoryRepository extends JpaRepository<HashtagHistory, Long> {
+
+    void deleteAllByHistoryId(Long historyId);
 }

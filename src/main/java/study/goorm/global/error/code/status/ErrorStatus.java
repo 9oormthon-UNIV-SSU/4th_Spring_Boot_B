@@ -17,7 +17,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // Cloth
     NO_SUCH_CLOTH(HttpStatus.BAD_REQUEST, "CLOTH_4001","옷이 존재하지 않습니다"),
 
-    NO_ClOTH_IMAGE(HttpStatus.BAD_REQUEST, "CLOTH_4002", "옷 이미지가 존재하지 않습니다"),
+    NO_CLOTH_IMAGE(HttpStatus.BAD_REQUEST, "CLOTH_4002", "옷 이미지가 존재하지 않습니다"),
     // Member
     NO_SUCH_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","멤버가 존재하지 않습니다."),
     // Page
@@ -25,7 +25,18 @@ public enum ErrorStatus implements BaseErrorCode {
     PAGE_SIZE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4002","페이지 사이즈는 1이상으로 입력해야 합니다."),
     // ErrorStatus에 에러 추가 !
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST, "CLOTH_4003", "카테고리가 존재하지 않습니다."),
-    LOWER_TEMP_BIGGER_THAN_UPPER_TEMP(HttpStatus.BAD_REQUEST,"CLOTH_4004","옷의 하한 온도가 상한 온도 보다 높습니다.");
+    LOWER_TEMP_BIGGER_THAN_UPPER_TEMP(HttpStatus.BAD_REQUEST,"CLOTH_4004","옷의 하한 온도가 상한 온도 보다 높습니다."),
+
+    // History
+    NO_SUCH_HISTORY(HttpStatus.BAD_REQUEST, "HISTORY_4001", "기록이 존재하지 않습니다."),
+    HISTORY_FORBIDDEN(HttpStatus.FORBIDDEN, "HISTORY_4002", "해당 기록에 대한 권한이 없습니다."),
+    HISTORY_DUPLICATE_CLOTHES(HttpStatus.BAD_REQUEST, "HISTORY_4003", "중복된 옷을 등록할 수 없습니다."),
+    HISTORY_DUPLICATE_HASHTAGS(HttpStatus.BAD_REQUEST, "HISTORY_4004", "중복된 해시태그를 등록할 수 없습니다."),
+    HISTORY_INVALID_CLOTHES(HttpStatus.BAD_REQUEST, "HISTORY_4005", "본인의 옷장에 없는 옷입니다."),
+    HISTORY_IMAGE_REQUIRED(HttpStatus.BAD_REQUEST, "HISTORY_4006", "이미지는 필수 입력 항목입니다."),
+    HISTORY_TOO_MANY_IMAGES(HttpStatus.BAD_REQUEST, "HISTORY_4007", "이미지는 최대 10개까지 업로드할 수 있습니다."),
+    HISTORY_CONTENT_TOO_LONG(HttpStatus.BAD_REQUEST, "HISTORY_4008", "내용은 200자 이하로 입력해주세요.")
+    ;
 
     private final HttpStatus httpStatus;
     private final String code;

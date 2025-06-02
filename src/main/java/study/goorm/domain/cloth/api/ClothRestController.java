@@ -95,4 +95,21 @@ public class ClothRestController {
         return BaseResponse.onSuccess(SuccessStatus.CLOTH_DELETED, null);
     }
 
+    @PatchMapping("/{cloth-id}")
+    @Operation(summary = "특정 옷을 수정하는 API", description = "path variable로 cloth-id를 넘겨주세요. request body에 ClothUpdateRequest 형식의 데이터를 전달해주세요.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "CLOTH_200", description = "OK, 성공적으로 수정되었습니다."),
+    })
+    @Parameters({
+            @Parameter(name = "cloth-id", description = "옷의 id, path variable 입니다.")
+    })
+    public BaseResponse<Void> updateCloth(
+            @PathVariable(value = "cloth-id") Long clothId,
+            @RequestBody @Valid ClothRequestDTO.ClothUpdateRequest clothUpdateRequest
+    ) {
+        clothService.updateCloth(clothId, clothUpdateRequest);
+
+        return BaseResponse.onSuccess(SuccessStatus.CLOTH_UPDATE_SUCCESS, null);
+    }
+
 }

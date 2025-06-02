@@ -44,4 +44,32 @@ public class ClothRequestDTO {
         private String brand;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @CheckLowerUpperTempBound
+    public static class ClothUpdateRequest {
+
+        private Long categoryId;
+
+        private String name;
+
+        private List<Season> seasons;
+
+        @Max(40)
+        @Min(-20)
+        private Integer tempUpperBound;
+
+        @Max(40)
+        @Min(-20)
+        private Integer tempLowerBound;
+
+        private ThicknessLevel thicknessLevel;
+
+        private String clothUrl;
+
+        private String brand;
+
+    }
 }

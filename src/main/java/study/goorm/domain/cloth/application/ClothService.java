@@ -15,4 +15,5 @@ public interface ClothService {
 
     void deleteCloth(Long clothId);
 
+    void updateCloth(Long clothId, ClothRequestDTO.ClothUpdateRequest clothUpdateRequest);
 }

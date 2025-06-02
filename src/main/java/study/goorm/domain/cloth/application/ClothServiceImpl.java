@@ -52,7 +52,7 @@ public class ClothServiceImpl implements ClothService {
         String firstImageUrl = clothImageUrls.stream()
                 .findFirst()
                 .map(ClothImage::getImageUrl)
-                .orElseThrow(() -> new ClothException(ErrorStatus.NO_ClOTH_IMAGE));
+                .orElseThrow(() -> new ClothException(ErrorStatus.NO_CLOTH_IMAGE));
 
 
         return ClothConverter.toClothEditViewResult(cloth,firstImageUrl);
@@ -110,7 +110,7 @@ public class ClothServiceImpl implements ClothService {
 
         ClothImage newClothImage = ClothImage.builder()
                 .cloth(newCloth)
-                .imageUrl("아직 S3를 구현하지 않아서 url이 없어용")
+                .imageUrl("temp-cloth-image-" + System.currentTimeMillis() + "-" + newCloth.getId())
                 .build();
 
         clothImageRepository.save(newClothImage);
@@ -134,4 +134,22 @@ public class ClothServiceImpl implements ClothService {
         clothRepository.delete(cloth);
     }
 
+    @Override
+    @Transactional
+    public void updateCloth(Long clothId, ClothRequestDTO.ClothUpdateRequest clothUpdateRequest) {
+
+        Cloth cloth = clothRepository.findById(clothId)
+                .orElseThrow(() -> new ClothException(ErrorStatus.NO_SUCH_CLOTH));
+
+        // 카테고리 변경이 필요한 경우
+        Category category = null;
+        if (clothUpdateRequest.getCategoryId() != null) {
+            category = categoryRepository.findById(clothUpdateRequest.getCategoryId())
+                    .orElseThrow(() -> new ClothException(ErrorStatus.NO_SUCH_CATEGORY));
+        }
+
+        // 부분 업데이트 수행
+        cloth.updatePartially(clothUpdateRequest, category);
+
+    }
 }
