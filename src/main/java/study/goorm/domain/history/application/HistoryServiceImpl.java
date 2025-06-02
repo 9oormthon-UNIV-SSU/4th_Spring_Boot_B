@@ -15,6 +15,7 @@ import study.goorm.domain.history.dto.HistoryResponseDTO;
 import study.goorm.domain.history.exception.HistoryException;
 import study.goorm.domain.member.domain.entity.Member;
 import study.goorm.domain.member.domain.repository.MemberRepository;
+import study.goorm.global.common.utils.MinioUploader;
 import study.goorm.global.error.code.status.ErrorStatus;
 
 import java.time.LocalDate;
@@ -36,6 +37,7 @@ public class HistoryServiceImpl implements HistoryService {
     private final HashtagRepository hashtagRepository;
     private final ClothImageQueryService clothImageQueryService;
 
+    private final MinioUploader minioUploader;
 
     @Override
     @Transactional(readOnly = true)
@@ -106,9 +108,10 @@ public class HistoryServiceImpl implements HistoryService {
             throw new HistoryException(ErrorStatus.EMPTY_HISTORY_IMAGE);
         }
         for (MultipartFile imageFile : imageFiles) {
+            String imageUrl = minioUploader.uploadImage(imageFile);
             HistoryImage image = HistoryImage.builder()
                     .history(history)
-                    .url("지금은 url이 없음")
+                    .url(imageUrl)
                     .build();
             historyImageRepository.save(image);
         }
