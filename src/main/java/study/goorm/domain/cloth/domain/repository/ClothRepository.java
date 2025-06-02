@@ -5,3 +5,4 @@ import study.goorm.domain.cloth.domain.entity.Cloth;
 
 public interface ClothRepository extends JpaRepository<Cloth, Long> {
 }
+//test
