@@ -2,6 +2,7 @@ package study.goorm.domain.history.converter;
 
 import study.goorm.domain.cloth.domain.entity.Cloth;
 import study.goorm.domain.history.domain.entity.History;
+import study.goorm.domain.history.dto.HistoryRequestDTO;
 import study.goorm.domain.history.dto.HistoryResponseDTO;
 import study.goorm.domain.member.domain.entity.Member;
 
@@ -68,5 +69,20 @@ public class HistoryConverter {
                         .clothName(cloth.getName())
                         .build())
                 .toList();
+    }
+
+    public static History toHistoryEntity(HistoryRequestDTO.CreateHistoryDTO dto, Member member) {
+        return History.builder()
+                .member(member)
+                .historyDate(dto.getDate())
+                .likes(0)
+                .content(dto.getContent())
+                .build();
+    }
+
+    public static HistoryResponseDTO.CreateHistoryResultDTO toCreateHistoryResultDTO(History history) {
+        return HistoryResponseDTO.CreateHistoryResultDTO.builder()
+                .historyId(history.getId())
+                .build();
     }
 }

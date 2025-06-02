@@ -60,4 +60,12 @@ public class HistoryResponseDTO {
         }
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CreateHistoryResultDTO {
+        private Long historyId;
+    }
+
 }
