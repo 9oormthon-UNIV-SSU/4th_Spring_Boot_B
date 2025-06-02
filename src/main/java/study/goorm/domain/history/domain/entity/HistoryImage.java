@@ -14,7 +14,7 @@ public class HistoryImage extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)

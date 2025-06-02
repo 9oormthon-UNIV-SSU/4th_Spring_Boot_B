@@ -27,6 +27,19 @@ public enum ErrorStatus implements BaseErrorCode {
     //Category
     NO_SUCH_CATEGORY(HttpStatus.BAD_REQUEST, "CLOTH_4003", "카테고리가 존재하지 않습니다."),
 
+    // History
+    NO_SUCH_HISTORY_MEMBER(HttpStatus.BAD_REQUEST, "MEMBER_4003", "존재하지 않는 멤버 ID 입니다."),
+    NO_SUCH_HISTORY(HttpStatus.BAD_REQUEST,"HISTORY_4002", "존재하지 않는 기록 ID 입니다."),
+    INVALID_HISTORY_DATE_FORMAT(HttpStatus.BAD_REQUEST, "HISTORY_4001", "잘못된 날짜 형식입니다."),
+    HISTORY_ACCESS_DENIED(HttpStatus.BAD_REQUEST, "HISTORY_4006", "기록에 접근 권한이 없습니다."),
+    EMPTY_HISTORY_IMAGE(HttpStatus.BAD_REQUEST, "HISTORY_4004", "기록의 이미지는 필수입니다."),
+    EMPTY_CLOTH(HttpStatus.BAD_REQUEST, "HISTORY_4005", "등록할 옷이 비어있습니다."),
+    DUPLICATE_CLOTH(HttpStatus.BAD_REQUEST, "HISTORY_4005", "등록된 옷 목록에 중복 항목이 있습니다."),
+    INVALID_CLOTH_ID(HttpStatus.BAD_REQUEST, "HISTORY_4007", "존재하지 않거나 소유하지 않은 옷 ID입니다."),
+    DUPLICATE_HASHTAG(HttpStatus.BAD_REQUEST, "HISTORY_4008", "해시태그 목록에 중복 항목이 있습니다."),
+    CONTENT_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "HISTORY_4009", "내용은 200자를 초과할 수 없습니다."),
+    TOO_MANY_IMAGES(HttpStatus.BAD_REQUEST, "HISTORY_4010", "이미지는 최대 10장까지만 업로드할 수 있습니다."),
+
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),
     PAGE_SIZE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4002","페이지 사이즈는 1이상으로 입력해야 합니다.");

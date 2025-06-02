@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class History extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDate historyDate;
@@ -29,4 +29,8 @@ public class History extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id",nullable = false)
     private Member member;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
