@@ -12,6 +12,7 @@ public interface HistoryService {
     HistoryResponseDTO.DailyHistoryDTO getDailyHistory(Long historyId);
     HistoryResponseDTO.CreateHistoryResultDTO createHistory(HistoryRequestDTO.CreateHistoryDTO requestDTO, List<MultipartFile> imageFiles);
     void updateHistory(Long historyId,HistoryRequestDTO.UpdateHistoryDTO requestDTO, List<MultipartFile> imageFiles);
+    void deleteHistory(Long historyId);
 
 }
 

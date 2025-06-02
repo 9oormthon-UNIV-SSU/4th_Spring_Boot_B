@@ -98,6 +98,17 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_UPDATED, null);
     }
 
+    @DeleteMapping("/{historyId}")
+    @Operation(summary = "날짜별 옷 기록 삭제 API", description = "기록과 관련된 모든 연관 데이터를 함께 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "기록이 성공적으로 삭제되었습니다."),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 기록 ID입니다."),
+            @ApiResponse(responseCode = "403", description = "삭제 권한이 없습니다.")
+    })
+    public BaseResponse<Void> deleteHistory(@PathVariable Long historyId) {
+        historyService.deleteHistory(historyId);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_DELETED, null);
+    }
 
 
 }

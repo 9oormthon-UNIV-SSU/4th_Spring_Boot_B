@@ -63,4 +63,10 @@ public class Cloth extends BaseEntity {
     public void increaseWearCount() {
         this.wearNumber += 1;
     }
+
+    public void decreaseWearCount() {
+        if (this.wearNumber > 0) {
+            this.wearNumber -= 1;
+        }
+    }
 }

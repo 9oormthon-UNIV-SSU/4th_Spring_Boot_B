@@ -35,6 +35,8 @@ public class HistoryServiceImpl implements HistoryService {
     private final HistoryClothRepository historyClothRepository;
     private final ClothRepository clothRepository;
     private final HashtagRepository hashtagRepository;
+    private final CommentRepository commentRepository;
+    private final MemberLikeRepository memberLikeRepository;
     private final ClothImageQueryService clothImageQueryService;
 
     private final MinioUploader minioUploader;
@@ -222,5 +224,41 @@ public class HistoryServiceImpl implements HistoryService {
         }
 
         history.updateContent(requestDTO.getContent());
+    }
+
+    @Override
+    @Transactional
+    public void deleteHistory(Long historyId) {
+        Member member = memberRepository.findById(1L) // 실제 구현 시 로그인 정보 기반으로 수정
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
+
+        History history = historyRepository.findByIdWithMember(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        if (!history.getMember().getId().equals(member.getId())) {
+            throw new HistoryException(ErrorStatus.HISTORY_ACCESS_DENIED);
+        }
+
+        // 좋아요 삭제
+        memberLikeRepository.deleteAllByHistoryId(historyId);
+
+        // 댓글 삭제
+        commentRepository.deleteAllByHistoryId(historyId);
+
+        // 해시태그 매핑 삭제
+        hashtagHistoryRepository.deleteAllByHistoryId(historyId);
+
+        // 이미지 삭제
+        historyImageRepository.deleteAllByHistoryId(historyId);
+
+        // 옷 매핑 삭제 및 착용 횟수 감소
+        List<HistoryCloth> historyCloths = historyClothRepository.findAllByHistoryId(historyId);
+        for (HistoryCloth hc : historyCloths) {
+            hc.getCloth().decreaseWearCount();
+        }
+        historyClothRepository.deleteAllByHistoryId(historyId);
+
+        // 기록 삭제
+        historyRepository.delete(history);
     }
 }
