@@ -6,5 +6,6 @@ import java.time.YearMonth;
 
 public interface HistoryService {
     HistoryResponseDTO.MonthlyHistoryDTO getMonthlyHistories(String clokeyId, YearMonth month);
+    HistoryResponseDTO.DailyHistoryDTO getDailyHistory(Long historyId);
 }
 

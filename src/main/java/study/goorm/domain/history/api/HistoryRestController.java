@@ -7,11 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import study.goorm.domain.history.application.HistoryImageQueryService;
+import org.springframework.web.bind.annotation.*;
 import study.goorm.domain.history.application.HistoryService;
 import study.goorm.domain.history.dto.HistoryResponseDTO;
 import study.goorm.global.common.response.BaseResponse;
@@ -21,12 +17,11 @@ import java.time.YearMonth;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/histories-")
+@RequestMapping("/histories")
 @Validated
 public class HistoryRestController {
 
     private final HistoryService historyService;
-    private final HistoryImageQueryService historyImageQueryService;
 
     @GetMapping("/monthly")
     @Operation(
@@ -43,6 +38,19 @@ public class HistoryRestController {
     ) {
         HistoryResponseDTO.MonthlyHistoryDTO result = historyService.getMonthlyHistories(clokeyId, month);
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_MONTHLY_VIEW_SUCCESS, result);
+    }
+
+    @GetMapping("/daily/{historyId}")
+    @Operation(summary = "일별 기록 상세 조회", description = "PathVariable로 historyId를 입력하면 해당 기록의 상세 정보를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "성공적으로 조회되었습니다."),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 historyId 또는 접근 권한 없음.")
+    })
+    public BaseResponse<HistoryResponseDTO.DailyHistoryDTO> getDailyHistory(
+            @Parameter(description = "기록 ID") @PathVariable Long historyId
+    ) {
+        HistoryResponseDTO.DailyHistoryDTO result = historyService.getDailyHistory(historyId);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_DAILY_VIEW_SUCCESS, result);
     }
 
 }

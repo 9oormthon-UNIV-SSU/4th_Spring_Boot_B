@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class History extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     @Column(nullable = false)
     private LocalDate historyDate;
