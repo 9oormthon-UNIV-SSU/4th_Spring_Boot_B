@@ -9,6 +9,8 @@ import study.goorm.domain.member.domain.entity.Member;
 import study.goorm.domain.model.entity.BaseEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,6 +38,9 @@ public class History extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @OneToMany(mappedBy = "history", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<HistoryImage> photos = new ArrayList<>();
 
 }
 

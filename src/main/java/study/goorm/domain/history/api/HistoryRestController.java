@@ -1,10 +1,9 @@
 package study.goorm.domain.history.api;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +13,8 @@ import study.goorm.domain.history.application.HistoryService;
 import study.goorm.domain.history.dto.HistoryResponseDTO;
 import study.goorm.global.common.response.BaseResponse;
 import study.goorm.global.error.code.status.SuccessStatus;
+
+import java.time.YearMonth;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +30,8 @@ public class HistoryRestController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "HISTORY_200", description = "기록이 성공적으로 조회되었습니다."),
     })
     public BaseResponse<HistoryResponseDTO.MonthlyHistoryViewResult> getMonthlyHistories(
-            @RequestParam(required = false) Long clokeyId,
-            @RequestParam String month
+            @RequestParam(value = "clokeyId", required = false) String clokeyId,
+            @RequestParam("month") @DateTimeFormat(pattern = "yyyy-MM") YearMonth month
     ) {
         HistoryResponseDTO.MonthlyHistoryViewResult result = historyService.getMonthlyHistories(clokeyId, month);
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_VIEW_SUCCESS, result);

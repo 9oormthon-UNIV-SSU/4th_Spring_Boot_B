@@ -30,6 +30,9 @@ public enum ErrorStatus implements BaseErrorCode {
     //History
     NO_SUCH_HISTORY(HttpStatus.BAD_REQUEST, "HISTORY_4001","기록이 존재하지 않습니다"),
 
+    //Date
+    INVALID_MONTH_FORMAT(HttpStatus.BAD_REQUEST, "DATE_4001", "날짜 형식이 올바르지 않습니다"),
+
     ;
 
     private final HttpStatus httpStatus;

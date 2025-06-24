@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 
 public class HistoryResponseDTO {
@@ -18,13 +19,14 @@ public class HistoryResponseDTO {
         private Long memberId;
         private String nickName;
         private List<HistoryItem> histories;
+    }
 
-        @Getter
-        @AllArgsConstructor
-        public static class HistoryItem {
-            private Long historyId;
-            private LocalDate date;
-            private String imageUrl;
-        }
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class HistoryItem {
+        private Long historyId;
+        private LocalDate date;
+        private String imageUrl;
     }
 }
