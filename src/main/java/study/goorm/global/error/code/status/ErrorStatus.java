@@ -37,7 +37,8 @@ public enum ErrorStatus implements BaseErrorCode {
     //History
     NO_SUCH_HISTORY(HttpStatus.NOT_FOUND, "HISTORY_4002","존재하지 않는 기록ID입니다"),
 
-    NO_AUTHORITY_HISTORY(HttpStatus.FORBIDDEN,"HISTORY_4006","기록에 접근 권한이 없습니다.");
+    NO_AUTHORITY_HISTORY(HttpStatus.FORBIDDEN,"HISTORY_4006","기록에 접근 권한이 없습니다."),
+    NO_SUCH_HISTORY_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","존재하지 않는 ID멤버입니다.");
 
 
     private final HttpStatus httpStatus;
