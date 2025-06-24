@@ -6,6 +6,7 @@ import study.goorm.global.exception.GeneralException;
 public class MemberException extends GeneralException {
 
     public MemberException(BaseErrorCode code) {
+
         super(code);
     }
 }
