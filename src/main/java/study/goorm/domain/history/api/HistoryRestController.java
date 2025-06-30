@@ -164,7 +164,7 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_VIEW_SUCCESS, result);
     }
 
-    @PatchMapping("/histories/comment/{commentId}")
+    @PatchMapping("/comment/{commentId}")
     @Operation(summary = "댓글 수정 API", description = "자신이 작성한 댓글의 내용을 수정합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "댓글 수정 성공"),
@@ -178,4 +178,14 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_UPDATE_SUCCESS,null);
     }
 
+    @DeleteMapping("/comments/{commentId}")
+    @Operation(summary = "댓글 삭제 API", description = "댓글과 해당 댓글의 대댓글을 함께 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 댓글 ID")
+    })
+    public BaseResponse<Void> deleteComment(@PathVariable Long commentId) {
+        historyService.deleteComment(commentId);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_DELETE_SUCCESS, null);
+    }
 }

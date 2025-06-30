@@ -18,5 +18,6 @@ public interface HistoryService {
     HistoryResponseDTO.CommentResultDTO writeComment(Long historyId, HistoryRequestDTO.CommentRequestDTO request);
     HistoryResponseDTO.CommentsPageDTO getComments(Long historyId, int page);
     void updateComment(Long commentId, HistoryRequestDTO.UpdateCommentDTO request);
+    void deleteComment(Long commentId);
 }
 

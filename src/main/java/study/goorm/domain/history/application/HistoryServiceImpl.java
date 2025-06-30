@@ -386,4 +386,14 @@ public class HistoryServiceImpl implements HistoryService {
         comment.updateContent(request.getContent());
     }
 
+    @Override
+    @Transactional
+    public void deleteComment(Long commentId){
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_COMMENT));
+
+        commentRepository.deleteAllByComment(comment);
+        commentRepository.delete(comment);
+    }
+
 }

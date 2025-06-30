@@ -14,4 +14,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Optional<Comment> findById(Long id);
     Page<Comment> findAllByHistoryAndCommentIsNull(History history, Pageable pageable);
     List<Comment> findAllByCommentIn(List<Comment> parents);
+    void deleteAllByComment(Comment comment);
 }
