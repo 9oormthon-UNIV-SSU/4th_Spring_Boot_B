@@ -13,6 +13,7 @@ public interface HistoryService {
     HistoryResponseDTO.CreateHistoryResultDTO createHistory(HistoryRequestDTO.CreateHistoryDTO requestDTO, List<MultipartFile> imageFiles);
     void updateHistory(Long historyId,HistoryRequestDTO.UpdateHistoryDTO requestDTO, List<MultipartFile> imageFiles);
     void deleteHistory(Long historyId);
+    HistoryResponseDTO.LikeResponseDTO toggleLike(HistoryRequestDTO.LikeRequestDTO requestDTO);
 
 }
 

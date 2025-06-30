@@ -110,5 +110,18 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_DELETED, null);
     }
 
+    @PostMapping("/like")
+    @Operation(summary = "좋아요 상태 토글 API", description = "기존 liked 상태를 기반으로 좋아요/취소를 수행합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "좋아요 상태가 성공적으로 변경되었습니다."),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
+    public BaseResponse<HistoryResponseDTO.LikeResponseDTO> toggleLike(
+            @Valid @RequestBody HistoryRequestDTO.LikeRequestDTO request
+    ) {
+        HistoryResponseDTO.LikeResponseDTO result = historyService.toggleLike(request);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_LIKE_UPDATED, result);
+    }
+
 
 }

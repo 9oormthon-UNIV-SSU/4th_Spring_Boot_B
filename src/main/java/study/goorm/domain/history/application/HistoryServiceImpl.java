@@ -261,4 +261,37 @@ public class HistoryServiceImpl implements HistoryService {
         // 기록 삭제
         historyRepository.delete(history);
     }
+
+    @Override
+    @Transactional
+    public HistoryResponseDTO.LikeResponseDTO toggleLike(HistoryRequestDTO.LikeRequestDTO request) {
+        Long historyId = request.getHistoryId();
+        Boolean currentLiked = request.getLiked();
+
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
+
+        boolean actuallyLiked = memberLikeRepository.existsByMemberIdAndHistoryId(member.getId(), historyId);
+        if (actuallyLiked != currentLiked) {
+            throw new HistoryException(ErrorStatus.INVALID_LIKE_STATUS);
+        }
+
+        if (actuallyLiked) {
+            memberLikeRepository.deleteByMemberIdAndHistoryId(member.getId(), historyId);
+            history.decreaseLikes();
+        } else {
+            MemberLike like = MemberLike.builder()
+                    .member(member)
+                    .history(history)
+                    .build();
+            memberLikeRepository.save(like);
+            history.increaseLikes();
+        }
+
+        return HistoryConverter.toLikeResponseDTO(history, !actuallyLiked);
+    }
+
 }

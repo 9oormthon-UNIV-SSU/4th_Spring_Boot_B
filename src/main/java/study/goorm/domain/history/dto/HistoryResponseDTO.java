@@ -68,4 +68,14 @@ public class HistoryResponseDTO {
         private Long historyId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikeResponseDTO {
+        private Long historyId;
+        private Boolean liked;
+        private int likeCount;
+    }
+
 }

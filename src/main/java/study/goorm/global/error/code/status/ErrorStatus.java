@@ -39,6 +39,7 @@ public enum ErrorStatus implements BaseErrorCode {
     DUPLICATE_HASHTAG(HttpStatus.BAD_REQUEST, "HISTORY_4008", "해시태그 목록에 중복 항목이 있습니다."),
     CONTENT_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST, "HISTORY_4009", "내용은 200자를 초과할 수 없습니다."),
     TOO_MANY_IMAGES(HttpStatus.BAD_REQUEST, "HISTORY_4010", "이미지는 최대 10장까지만 업로드할 수 있습니다."),
+    INVALID_LIKE_STATUS(HttpStatus.BAD_REQUEST, "HISTORY_4004", "잘못된 isLiked 정보를 입력했습니다."),
 
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),

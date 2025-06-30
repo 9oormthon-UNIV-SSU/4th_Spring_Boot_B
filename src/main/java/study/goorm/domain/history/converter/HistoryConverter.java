@@ -85,4 +85,12 @@ public class HistoryConverter {
                 .historyId(history.getId())
                 .build();
     }
+
+    public static HistoryResponseDTO.LikeResponseDTO toLikeResponseDTO(History history, boolean liked) {
+        return HistoryResponseDTO.LikeResponseDTO.builder()
+                .historyId(history.getId())
+                .liked(liked)
+                .likeCount(history.getLikes())
+                .build();
+    }
 }
