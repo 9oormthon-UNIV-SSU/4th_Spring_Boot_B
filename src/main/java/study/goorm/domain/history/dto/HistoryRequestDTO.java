@@ -49,4 +49,12 @@ public class HistoryRequestDTO {
         private Long commentId;
         private String content;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UpdateCommentDTO {
+        private String content;
+    }
 }

@@ -365,4 +365,25 @@ public class HistoryServiceImpl implements HistoryService {
 
         return HistoryConverter.toCommentsPageDTO(parentPage, replyMap);
     }
+
+    @Override
+    @Transactional
+    public void updateComment(Long commentId, HistoryRequestDTO.UpdateCommentDTO request) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_COMMENT));
+
+        Member member = memberRepository.findById(1L) //임시로 가정
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
+
+        String content = request.getContent();
+        if (content == null || content.trim().isEmpty() || content.length() > 50) {
+            throw new HistoryException(ErrorStatus.INVALID_COMMENT_CONTENT);
+        }
+
+        if (!comment.getMember().getId().equals(member.getId())) {
+            throw new HistoryException(ErrorStatus.NOT_OWN_COMMENT);
+        }
+        comment.updateContent(request.getContent());
+    }
+
 }

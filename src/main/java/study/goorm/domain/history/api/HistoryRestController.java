@@ -164,5 +164,18 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_VIEW_SUCCESS, result);
     }
 
+    @PatchMapping("/histories/comment/{commentId}")
+    @Operation(summary = "댓글 수정 API", description = "자신이 작성한 댓글의 내용을 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "나의 댓글이 아닌 경우 또는 유효하지 않은 댓글 ID")
+    })
+    public BaseResponse<Void> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody @Valid HistoryRequestDTO.UpdateCommentDTO request
+    ) {
+        historyService.updateComment(commentId, request);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_UPDATE_SUCCESS,null);
+    }
 
 }

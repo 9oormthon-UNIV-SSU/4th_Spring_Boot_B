@@ -41,10 +41,10 @@ public enum ErrorStatus implements BaseErrorCode {
     TOO_MANY_IMAGES(HttpStatus.BAD_REQUEST, "HISTORY_4010", "이미지는 최대 10장까지만 업로드할 수 있습니다."),
     INVALID_LIKE_STATUS(HttpStatus.BAD_REQUEST, "HISTORY_4011", "잘못된 isLiked 정보를 입력했습니다."),
     NO_SUCH_COMMENT(HttpStatus.BAD_REQUEST, "HISTORY_4012", "존재하지 않는 댓글 ID 입니다."),
-    INVALID_COMMENT_CONTENT(HttpStatus.BAD_REQUEST, "HISTORY_4013", "댓글은 공백 없이 1자 이상 50자 이하로 작성되어야 합니다."),
+    INVALID_COMMENT_CONTENT(HttpStatus.BAD_REQUEST, "HISTORY_4013", "댓글은 공백을 허용하지 않으며 1자 이상 50자 이하로 작성되어야 합니다."),
     ALREADY_REPLY_COMMENT(HttpStatus.BAD_REQUEST, "HISTORY_4014", "이미 대댓글인 댓글에는 다시 대댓글을 작성할 수 없습니다."),
     MISMATCHED_HISTORY_FOR_REPLY(HttpStatus.BAD_REQUEST, "HISTORY_4015", "대댓글의 원본 댓글과 게시글이 일치하지 않습니다."),
-
+    NOT_OWN_COMMENT(HttpStatus.BAD_REQUEST, "HISTORY_4016", "나의 댓글이 아닙니다."),
 
     // Page
     PAGE_UNDER_ONE(HttpStatus.BAD_REQUEST,"PAGE_4001","페이지는 1이상으로 입력해야 합니다."),
