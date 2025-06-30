@@ -307,7 +307,38 @@ public class HistoryServiceImpl implements HistoryService {
         return HistoryConverter.toLikedUsersResponseDTO(likedMembers);
     }
 
+    @Override
+    @Transactional
+    public HistoryResponseDTO.CommentResultDTO writeComment(Long historyId, HistoryRequestDTO.CommentRequestDTO request) {
+        Member me = memberRepository.findById(1L)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
 
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
 
+        String content = request.getContent();
+        if (content == null || content.trim().isEmpty() || content.length() > 50) {
+            throw new HistoryException(ErrorStatus.INVALID_COMMENT_CONTENT);
+        }
+
+        Comment parent = null;
+        if (request.getCommentId() != null) {
+            parent = commentRepository.findById(request.getCommentId())
+                    .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_COMMENT));
+
+            if (parent.getComment() != null) {
+                throw new HistoryException(ErrorStatus.ALREADY_REPLY_COMMENT); // 대대댓글 불가
+            }
+
+            if (!parent.getHistory().getId().equals(historyId)) {
+                throw new HistoryException(ErrorStatus.MISMATCHED_HISTORY_FOR_REPLY); // history 불일치
+            }
+        }
+
+        Comment comment = HistoryConverter.toCommentEntity(history, me, content, parent);
+        commentRepository.save(comment);
+
+        return HistoryConverter.toCommentResultDTO(comment);
+    }
 
 }

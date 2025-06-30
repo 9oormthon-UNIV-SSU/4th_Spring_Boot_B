@@ -97,4 +97,11 @@ public class HistoryResponseDTO {
         private String imageUrl;
     }
 
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentResultDTO {
+        private Long commentId;
+    }
 }

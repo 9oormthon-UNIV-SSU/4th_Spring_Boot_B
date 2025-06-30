@@ -1,6 +1,7 @@
 package study.goorm.domain.history.converter;
 
 import study.goorm.domain.cloth.domain.entity.Cloth;
+import study.goorm.domain.history.domain.entity.Comment;
 import study.goorm.domain.history.domain.entity.History;
 import study.goorm.domain.history.dto.HistoryRequestDTO;
 import study.goorm.domain.history.dto.HistoryResponseDTO;
@@ -108,6 +109,21 @@ public class HistoryConverter {
 
         return HistoryResponseDTO.LikedUsersResponseDTO.builder()
                 .likedUsers(likedUserDTOs)
+                .build();
+    }
+
+    public static Comment toCommentEntity(History history, Member member, String content, Comment parent) {
+        return Comment.builder()
+                .history(history)
+                .member(member)
+                .content(content)
+                .comment(parent)
+                .build();
+    }
+
+    public static HistoryResponseDTO.CommentResultDTO toCommentResultDTO(Comment comment) {
+        return HistoryResponseDTO.CommentResultDTO.builder()
+                .commentId(comment.getId())
                 .build();
     }
 

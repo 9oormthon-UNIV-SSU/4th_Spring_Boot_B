@@ -136,6 +136,21 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_LIKE_VIEW_SUCCESS, result);
     }
 
+    @PostMapping("/{historyId}/comments")
+    @Operation(summary = "댓글 작성 API", description = "댓글 또는 대댓글을 작성합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "댓글이 성공적으로 작성되었습니다."),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
+    public BaseResponse<HistoryResponseDTO.CommentResultDTO> writeComment(
+            @PathVariable Long historyId,
+            @Valid @RequestBody HistoryRequestDTO.CommentRequestDTO request
+    ) {
+        HistoryResponseDTO.CommentResultDTO result = historyService.writeComment(historyId, request);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_CREATED, result);
+    }
+
+
 
 
 }

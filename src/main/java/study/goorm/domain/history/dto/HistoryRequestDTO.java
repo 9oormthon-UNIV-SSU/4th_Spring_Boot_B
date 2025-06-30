@@ -40,4 +40,13 @@ public class HistoryRequestDTO {
         private Long historyId;
         private Boolean liked;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentRequestDTO {
+        private Long commentId;
+        private String content;
+    }
 }

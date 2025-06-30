@@ -20,12 +20,14 @@ public enum SuccessStatus implements BaseCode {
 
     //History
     HISTORY_MONTHLY_VIEW_SUCCESS(HttpStatus.OK, "HISTORY_200", "월별 기록이 성공적으로 조회되었습니다."),
-    HISTORY_DAILY_VIEW_SUCCESS(HttpStatus.OK, "HISTORY_201", "일별 기록이 성공적으로 조회되었습니다."),
-    HISTORY_CREATED(HttpStatus.CREATED, "HISTORY_202", "기록이 성공적으로 추가되었습니다."),
+    HISTORY_DAILY_VIEW_SUCCESS(HttpStatus.OK, "HISTORY_200", "일별 기록이 성공적으로 조회되었습니다."),
+    HISTORY_CREATED(HttpStatus.CREATED, "HISTORY_201", "기록이 성공적으로 추가되었습니다."),
     HISTORY_UPDATED(HttpStatus.OK, "HISTORY_200", "기록이 성공적으로 수정되었습니다."),
     HISTORY_DELETED(HttpStatus.OK, "HISTORY_200", "기록이 성공적으로 삭제되었습니다."),
     HISTORY_LIKE_UPDATED(HttpStatus.OK, "HISTORY_200", "좋아요가 성공적으로 업데이트되었습니다."),
-    HISTORY_LIKE_VIEW_SUCCESS(HttpStatus.OK, "HISTORY_200", "좋아요 유저 목록이 성공적으로 조회되었습니다.");
+    HISTORY_LIKE_VIEW_SUCCESS(HttpStatus.OK, "HISTORY_200", "좋아요 유저 목록이 성공적으로 조회되었습니다."),
+    HISTORY_COMMENT_CREATED(HttpStatus.CREATED, "HISTORY_201", "댓글이 성공적으로 추가되었습니다.");
+
 
 
     private final HttpStatus httpStatus;

@@ -15,6 +15,8 @@ public interface HistoryService {
     void deleteHistory(Long historyId);
     HistoryResponseDTO.LikeResponseDTO toggleLike(HistoryRequestDTO.LikeRequestDTO requestDTO);
     HistoryResponseDTO.LikedUsersResponseDTO getLikedUsers(Long historyId);
+    HistoryResponseDTO.CommentResultDTO writeComment(Long historyId, HistoryRequestDTO.CommentRequestDTO request);
+
 
 }
 
