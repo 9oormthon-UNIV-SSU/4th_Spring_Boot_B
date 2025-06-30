@@ -150,7 +150,19 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_CREATED, result);
     }
 
-
+    @GetMapping("/{historyId}/comments")
+    @Operation(summary = "댓글 목록 조회 API", description = "댓글과 대댓글을 포함한 댓글 목록을 페이지 단위로 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 기록 ID 또는 페이지 번호")
+    })
+    public BaseResponse<HistoryResponseDTO.CommentsPageDTO> getComments(
+            @PathVariable Long historyId,
+            @RequestParam(name = "page", defaultValue = "1") int page
+    ) {
+        HistoryResponseDTO.CommentsPageDTO result = historyService.getComments(historyId, page);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_VIEW_SUCCESS, result);
+    }
 
 
 }

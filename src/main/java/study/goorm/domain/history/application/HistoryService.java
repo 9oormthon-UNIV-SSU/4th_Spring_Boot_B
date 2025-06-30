@@ -16,7 +16,7 @@ public interface HistoryService {
     HistoryResponseDTO.LikeResponseDTO toggleLike(HistoryRequestDTO.LikeRequestDTO requestDTO);
     HistoryResponseDTO.LikedUsersResponseDTO getLikedUsers(Long historyId);
     HistoryResponseDTO.CommentResultDTO writeComment(Long historyId, HistoryRequestDTO.CommentRequestDTO request);
-
+    HistoryResponseDTO.CommentsPageDTO getComments(Long historyId, int page);
 
 }
 

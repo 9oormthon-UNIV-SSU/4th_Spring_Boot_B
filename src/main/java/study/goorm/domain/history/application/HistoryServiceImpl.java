@@ -1,6 +1,10 @@
 package study.goorm.domain.history.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +26,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -341,4 +346,23 @@ public class HistoryServiceImpl implements HistoryService {
         return HistoryConverter.toCommentResultDTO(comment);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public HistoryResponseDTO.CommentsPageDTO getComments(Long historyId, int page) {
+        if (page < 1) {
+            throw new HistoryException(ErrorStatus.PAGE_UNDER_ONE);
+        }
+
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Comment> parentPage = commentRepository.findAllByHistoryAndCommentIsNull(history, pageable);
+
+        List<Comment> allReplies = commentRepository.findAllByCommentIn(parentPage.getContent());
+        Map<Long, List<Comment>> replyMap = allReplies.stream()
+                .collect(Collectors.groupingBy(reply -> reply.getComment().getId()));
+
+        return HistoryConverter.toCommentsPageDTO(parentPage, replyMap);
+    }
 }

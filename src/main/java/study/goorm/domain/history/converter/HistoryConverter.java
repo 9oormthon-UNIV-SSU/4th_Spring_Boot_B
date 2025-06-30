@@ -1,5 +1,6 @@
 package study.goorm.domain.history.converter;
 
+import org.springframework.data.domain.Page;
 import study.goorm.domain.cloth.domain.entity.Cloth;
 import study.goorm.domain.history.domain.entity.Comment;
 import study.goorm.domain.history.domain.entity.History;
@@ -124,6 +125,53 @@ public class HistoryConverter {
     public static HistoryResponseDTO.CommentResultDTO toCommentResultDTO(Comment comment) {
         return HistoryResponseDTO.CommentResultDTO.builder()
                 .commentId(comment.getId())
+                .build();
+    }
+
+    public static HistoryResponseDTO.CommentWithRepliesDTO toCommentWithRepliesDTO(Comment parent,List<Comment> replies) {
+        Member member = parent.getMember();
+
+        return HistoryResponseDTO.CommentWithRepliesDTO.builder()
+                .commentId(parent.getId())
+                .nickname(member.getNickname())
+                .clokeyId(member.getClokeyId())
+                .imageUrl(member.getProfileUrl())
+                .content(parent.getContent())
+                .replyResults(toReplyDTOs(replies))
+                .build();
+    }
+
+    public static List<HistoryResponseDTO.CommentWithRepliesDTO.ReplyDTO> toReplyDTOs(List<Comment> replies) {
+        return replies.stream()
+                .map(reply -> {
+                    Member member = reply.getMember();
+                    return HistoryResponseDTO.CommentWithRepliesDTO.ReplyDTO.builder()
+                            .commentId(reply.getId())
+                            .nickname(member.getNickname())
+                            .clokeyId(member.getClokeyId())
+                            .imageUrl(member.getProfileUrl())
+                            .content(reply.getContent())
+                            .build();
+                }).toList();
+    }
+
+    public static HistoryResponseDTO.CommentsPageDTO toCommentsPageDTO(
+            Page<Comment> parentPage,
+            Map<Long, List<Comment>> replyMap
+    ) {
+        List<HistoryResponseDTO.CommentWithRepliesDTO> commentDTOs = parentPage.getContent().stream()
+                .map(parent -> {
+                    List<Comment> replies = replyMap.getOrDefault(parent.getId(), List.of());
+                    return toCommentWithRepliesDTO(parent, replies);
+                })
+                .toList();
+
+        return HistoryResponseDTO.CommentsPageDTO.builder()
+                .comments(commentDTOs)
+                .totalPage(parentPage.getTotalPages())
+                .totalElements(parentPage.getTotalElements())
+                .isFirst(parentPage.isFirst())
+                .isLast(parentPage.isLast())
                 .build();
     }
 

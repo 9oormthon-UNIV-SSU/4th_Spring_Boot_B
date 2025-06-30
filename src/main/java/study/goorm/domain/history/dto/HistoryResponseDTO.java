@@ -104,4 +104,42 @@ public class HistoryResponseDTO {
     public static class CommentResultDTO {
         private Long commentId;
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentsPageDTO {
+        private List<CommentWithRepliesDTO> comments;
+        private int totalPage;
+        private long totalElements;
+        private boolean isFirst;
+        private boolean isLast;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentWithRepliesDTO {
+        private Long commentId;
+        private String nickname;
+        private String clokeyId;
+        private String imageUrl;
+        private String content;
+        private List<ReplyDTO> replyResults;
+
+        @Getter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
+        public static class ReplyDTO {
+            private Long commentId;
+            private String nickname;
+            private String clokeyId;
+            private String imageUrl;
+            private String content;
+        }
+    }
+
 }
