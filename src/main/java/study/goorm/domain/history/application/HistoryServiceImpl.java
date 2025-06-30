@@ -290,8 +290,24 @@ public class HistoryServiceImpl implements HistoryService {
             memberLikeRepository.save(like);
             history.increaseLikes();
         }
-
         return HistoryConverter.toLikeResponseDTO(history, !actuallyLiked);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public HistoryResponseDTO.LikedUsersResponseDTO getLikedUsers(Long historyId) {
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        List<MemberLike> likes = memberLikeRepository.findAllByHistoryId(historyId);
+        List<Member> likedMembers = likes.stream()
+                .map(MemberLike::getMember)
+                .toList();
+
+        return HistoryConverter.toLikedUsersResponseDTO(likedMembers);
+    }
+
+
+
 
 }

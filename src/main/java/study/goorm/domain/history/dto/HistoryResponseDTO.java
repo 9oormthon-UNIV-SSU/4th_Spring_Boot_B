@@ -78,4 +78,23 @@ public class HistoryResponseDTO {
         private int likeCount;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikedUsersResponseDTO {
+        private List<LikedUserDTO> likedUsers;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikedUserDTO {
+        private Long memberId;
+        private String clokeyId;
+        private String nickname;
+        private String imageUrl;
+    }
+
 }

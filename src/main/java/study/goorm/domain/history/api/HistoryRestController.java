@@ -123,5 +123,19 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_LIKE_UPDATED, result);
     }
 
+    @GetMapping("/{historyId}/likes")
+    @Operation(summary = "기록 좋아요 유저 목록 조회 API", description = "기록 ID로 해당 게시물에 좋아요한 유저들의 정보를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "좋아요한 유저 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 기록 ID입니다.")
+    })
+    public BaseResponse<HistoryResponseDTO.LikedUsersResponseDTO> getLikedUsers(
+            @PathVariable Long historyId
+    ) {
+        HistoryResponseDTO.LikedUsersResponseDTO result = historyService.getLikedUsers(historyId);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_LIKE_VIEW_SUCCESS, result);
+    }
+
+
 
 }

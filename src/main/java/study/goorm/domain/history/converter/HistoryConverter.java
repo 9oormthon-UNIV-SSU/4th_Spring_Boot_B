@@ -93,4 +93,22 @@ public class HistoryConverter {
                 .likeCount(history.getLikes())
                 .build();
     }
+
+    public static HistoryResponseDTO.LikedUsersResponseDTO toLikedUsersResponseDTO(
+            List<Member> likedMembers
+    ) {
+        List<HistoryResponseDTO.LikedUserDTO> likedUserDTOs = likedMembers.stream()
+                .map(user -> HistoryResponseDTO.LikedUserDTO.builder()
+                        .memberId(user.getId())
+                        .clokeyId(user.getClokeyId())
+                        .nickname(user.getNickname())
+                        .imageUrl(user.getProfileUrl())
+                        .build())
+                .toList();
+
+        return HistoryResponseDTO.LikedUsersResponseDTO.builder()
+                .likedUsers(likedUserDTOs)
+                .build();
+    }
+
 }

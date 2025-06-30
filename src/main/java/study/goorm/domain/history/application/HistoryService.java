@@ -14,6 +14,7 @@ public interface HistoryService {
     void updateHistory(Long historyId,HistoryRequestDTO.UpdateHistoryDTO requestDTO, List<MultipartFile> imageFiles);
     void deleteHistory(Long historyId);
     HistoryResponseDTO.LikeResponseDTO toggleLike(HistoryRequestDTO.LikeRequestDTO requestDTO);
+    HistoryResponseDTO.LikedUsersResponseDTO getLikedUsers(Long historyId);
 
 }
 
