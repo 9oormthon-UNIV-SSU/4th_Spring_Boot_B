@@ -68,4 +68,78 @@ public class HistoryResponseDTO {
         private Long historyId;
     }
 
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikeResponseDTO {
+        private Long historyId;
+        private Boolean liked;
+        private int likeCount;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikedUsersResponseDTO {
+        private List<LikedUserDTO> likedUsers;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikedUserDTO {
+        private Long memberId;
+        private String clokeyId;
+        private String nickname;
+        private String imageUrl;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentResultDTO {
+        private Long commentId;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentsPageDTO {
+        private List<CommentWithRepliesDTO> comments;
+        private int totalPage;
+        private long totalElements;
+        private boolean isFirst;
+        private boolean isLast;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class CommentWithRepliesDTO {
+        private Long commentId;
+        private String nickname;
+        private String clokeyId;
+        private String imageUrl;
+        private String content;
+        private List<ReplyDTO> replyResults;
+
+        @Getter
+        @NoArgsConstructor
+        @AllArgsConstructor
+        @Builder
+        public static class ReplyDTO {
+            private Long commentId;
+            private String nickname;
+            private String clokeyId;
+            private String imageUrl;
+            private String content;
+        }
+    }
+
 }

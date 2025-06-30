@@ -1,6 +1,10 @@
 package study.goorm.domain.history.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +26,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -261,4 +266,134 @@ public class HistoryServiceImpl implements HistoryService {
         // 기록 삭제
         historyRepository.delete(history);
     }
+
+    @Override
+    @Transactional
+    public HistoryResponseDTO.LikeResponseDTO toggleLike(HistoryRequestDTO.LikeRequestDTO request) {
+        Long historyId = request.getHistoryId();
+        Boolean currentLiked = request.getLiked();
+
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        Member member = memberRepository.findById(1L)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
+
+        boolean actuallyLiked = memberLikeRepository.existsByMemberIdAndHistoryId(member.getId(), historyId);
+        if (actuallyLiked != currentLiked) {
+            throw new HistoryException(ErrorStatus.INVALID_LIKE_STATUS);
+        }
+
+        if (actuallyLiked) {
+            memberLikeRepository.deleteByMemberIdAndHistoryId(member.getId(), historyId);
+            history.decreaseLikes();
+        } else {
+            MemberLike like = MemberLike.builder()
+                    .member(member)
+                    .history(history)
+                    .build();
+            memberLikeRepository.save(like);
+            history.increaseLikes();
+        }
+        return HistoryConverter.toLikeResponseDTO(history, !actuallyLiked);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public HistoryResponseDTO.LikedUsersResponseDTO getLikedUsers(Long historyId) {
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        List<MemberLike> likes = memberLikeRepository.findAllByHistoryId(historyId);
+        List<Member> likedMembers = likes.stream()
+                .map(MemberLike::getMember)
+                .toList();
+
+        return HistoryConverter.toLikedUsersResponseDTO(likedMembers);
+    }
+
+    @Override
+    @Transactional
+    public HistoryResponseDTO.CommentResultDTO writeComment(Long historyId, HistoryRequestDTO.CommentRequestDTO request) {
+        Member me = memberRepository.findById(1L)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
+
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        String content = request.getContent();
+        if (content == null || content.trim().isEmpty() || content.length() > 50) {
+            throw new HistoryException(ErrorStatus.INVALID_COMMENT_CONTENT);
+        }
+
+        Comment parent = null;
+        if (request.getCommentId() != null) {
+            parent = commentRepository.findById(request.getCommentId())
+                    .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_COMMENT));
+
+            if (parent.getComment() != null) {
+                throw new HistoryException(ErrorStatus.ALREADY_REPLY_COMMENT); // 대대댓글 불가
+            }
+
+            if (!parent.getHistory().getId().equals(historyId)) {
+                throw new HistoryException(ErrorStatus.MISMATCHED_HISTORY_FOR_REPLY); // history 불일치
+            }
+        }
+
+        Comment comment = HistoryConverter.toCommentEntity(history, me, content, parent);
+        commentRepository.save(comment);
+
+        return HistoryConverter.toCommentResultDTO(comment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public HistoryResponseDTO.CommentsPageDTO getComments(Long historyId, int page) {
+        if (page < 1) {
+            throw new HistoryException(ErrorStatus.PAGE_UNDER_ONE);
+        }
+
+        History history = historyRepository.findById(historyId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY));
+
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Comment> parentPage = commentRepository.findAllByHistoryAndCommentIsNull(history, pageable);
+
+        List<Comment> allReplies = commentRepository.findAllByCommentIn(parentPage.getContent());
+        Map<Long, List<Comment>> replyMap = allReplies.stream()
+                .collect(Collectors.groupingBy(reply -> reply.getComment().getId()));
+
+        return HistoryConverter.toCommentsPageDTO(parentPage, replyMap);
+    }
+
+    @Override
+    @Transactional
+    public void updateComment(Long commentId, HistoryRequestDTO.UpdateCommentDTO request) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_COMMENT));
+
+        Member member = memberRepository.findById(1L) //임시로 가정
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_HISTORY_MEMBER));
+
+        String content = request.getContent();
+        if (content == null || content.trim().isEmpty() || content.length() > 50) {
+            throw new HistoryException(ErrorStatus.INVALID_COMMENT_CONTENT);
+        }
+
+        if (!comment.getMember().getId().equals(member.getId())) {
+            throw new HistoryException(ErrorStatus.NOT_OWN_COMMENT);
+        }
+        comment.updateContent(request.getContent());
+    }
+
+    @Override
+    @Transactional
+    public void deleteComment(Long commentId){
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new HistoryException(ErrorStatus.NO_SUCH_COMMENT));
+
+        commentRepository.deleteAllByComment(comment);
+        commentRepository.delete(comment);
+    }
+
 }

@@ -13,6 +13,11 @@ public interface HistoryService {
     HistoryResponseDTO.CreateHistoryResultDTO createHistory(HistoryRequestDTO.CreateHistoryDTO requestDTO, List<MultipartFile> imageFiles);
     void updateHistory(Long historyId,HistoryRequestDTO.UpdateHistoryDTO requestDTO, List<MultipartFile> imageFiles);
     void deleteHistory(Long historyId);
-
+    HistoryResponseDTO.LikeResponseDTO toggleLike(HistoryRequestDTO.LikeRequestDTO requestDTO);
+    HistoryResponseDTO.LikedUsersResponseDTO getLikedUsers(Long historyId);
+    HistoryResponseDTO.CommentResultDTO writeComment(Long historyId, HistoryRequestDTO.CommentRequestDTO request);
+    HistoryResponseDTO.CommentsPageDTO getComments(Long historyId, int page);
+    void updateComment(Long commentId, HistoryRequestDTO.UpdateCommentDTO request);
+    void deleteComment(Long commentId);
 }
 

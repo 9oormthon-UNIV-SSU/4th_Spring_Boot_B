@@ -110,5 +110,82 @@ public class HistoryRestController {
         return BaseResponse.onSuccess(SuccessStatus.HISTORY_DELETED, null);
     }
 
+    @PostMapping("/like")
+    @Operation(summary = "좋아요 상태 토글 API", description = "기존 liked 상태를 기반으로 좋아요/취소를 수행합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "좋아요 상태가 성공적으로 변경되었습니다."),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
+    public BaseResponse<HistoryResponseDTO.LikeResponseDTO> toggleLike(
+            @Valid @RequestBody HistoryRequestDTO.LikeRequestDTO request
+    ) {
+        HistoryResponseDTO.LikeResponseDTO result = historyService.toggleLike(request);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_LIKE_UPDATED, result);
+    }
 
+    @GetMapping("/{historyId}/likes")
+    @Operation(summary = "기록 좋아요 유저 목록 조회 API", description = "기록 ID로 해당 게시물에 좋아요한 유저들의 정보를 반환합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "좋아요한 유저 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 기록 ID입니다.")
+    })
+    public BaseResponse<HistoryResponseDTO.LikedUsersResponseDTO> getLikedUsers(
+            @PathVariable Long historyId
+    ) {
+        HistoryResponseDTO.LikedUsersResponseDTO result = historyService.getLikedUsers(historyId);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_LIKE_VIEW_SUCCESS, result);
+    }
+
+    @PostMapping("/{historyId}/comments")
+    @Operation(summary = "댓글 작성 API", description = "댓글 또는 대댓글을 작성합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "댓글이 성공적으로 작성되었습니다."),
+            @ApiResponse(responseCode = "400", description = "잘못된 요청입니다.")
+    })
+    public BaseResponse<HistoryResponseDTO.CommentResultDTO> writeComment(
+            @PathVariable Long historyId,
+            @Valid @RequestBody HistoryRequestDTO.CommentRequestDTO request
+    ) {
+        HistoryResponseDTO.CommentResultDTO result = historyService.writeComment(historyId, request);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_CREATED, result);
+    }
+
+    @GetMapping("/{historyId}/comments")
+    @Operation(summary = "댓글 목록 조회 API", description = "댓글과 대댓글을 포함한 댓글 목록을 페이지 단위로 조회합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 목록 조회 성공"),
+            @ApiResponse(responseCode = "400", description = "잘못된 기록 ID 또는 페이지 번호")
+    })
+    public BaseResponse<HistoryResponseDTO.CommentsPageDTO> getComments(
+            @PathVariable Long historyId,
+            @RequestParam(name = "page", defaultValue = "1") int page
+    ) {
+        HistoryResponseDTO.CommentsPageDTO result = historyService.getComments(historyId, page);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_VIEW_SUCCESS, result);
+    }
+
+    @PatchMapping("/comment/{commentId}")
+    @Operation(summary = "댓글 수정 API", description = "자신이 작성한 댓글의 내용을 수정합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 수정 성공"),
+            @ApiResponse(responseCode = "400", description = "나의 댓글이 아닌 경우 또는 유효하지 않은 댓글 ID")
+    })
+    public BaseResponse<Void> updateComment(
+            @PathVariable Long commentId,
+            @RequestBody @Valid HistoryRequestDTO.UpdateCommentDTO request
+    ) {
+        historyService.updateComment(commentId, request);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_UPDATE_SUCCESS,null);
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    @Operation(summary = "댓글 삭제 API", description = "댓글과 해당 댓글의 대댓글을 함께 삭제합니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "댓글 삭제 성공"),
+            @ApiResponse(responseCode = "400", description = "존재하지 않는 댓글 ID")
+    })
+    public BaseResponse<Void> deleteComment(@PathVariable Long commentId) {
+        historyService.deleteComment(commentId);
+        return BaseResponse.onSuccess(SuccessStatus.HISTORY_COMMENT_DELETE_SUCCESS, null);
+    }
 }

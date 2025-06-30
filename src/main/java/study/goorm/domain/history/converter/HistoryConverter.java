@@ -1,6 +1,8 @@
 package study.goorm.domain.history.converter;
 
+import org.springframework.data.domain.Page;
 import study.goorm.domain.cloth.domain.entity.Cloth;
+import study.goorm.domain.history.domain.entity.Comment;
 import study.goorm.domain.history.domain.entity.History;
 import study.goorm.domain.history.dto.HistoryRequestDTO;
 import study.goorm.domain.history.dto.HistoryResponseDTO;
@@ -85,4 +87,92 @@ public class HistoryConverter {
                 .historyId(history.getId())
                 .build();
     }
+
+    public static HistoryResponseDTO.LikeResponseDTO toLikeResponseDTO(History history, boolean liked) {
+        return HistoryResponseDTO.LikeResponseDTO.builder()
+                .historyId(history.getId())
+                .liked(liked)
+                .likeCount(history.getLikes())
+                .build();
+    }
+
+    public static HistoryResponseDTO.LikedUsersResponseDTO toLikedUsersResponseDTO(
+            List<Member> likedMembers
+    ) {
+        List<HistoryResponseDTO.LikedUserDTO> likedUserDTOs = likedMembers.stream()
+                .map(user -> HistoryResponseDTO.LikedUserDTO.builder()
+                        .memberId(user.getId())
+                        .clokeyId(user.getClokeyId())
+                        .nickname(user.getNickname())
+                        .imageUrl(user.getProfileUrl())
+                        .build())
+                .toList();
+
+        return HistoryResponseDTO.LikedUsersResponseDTO.builder()
+                .likedUsers(likedUserDTOs)
+                .build();
+    }
+
+    public static Comment toCommentEntity(History history, Member member, String content, Comment parent) {
+        return Comment.builder()
+                .history(history)
+                .member(member)
+                .content(content)
+                .comment(parent)
+                .build();
+    }
+
+    public static HistoryResponseDTO.CommentResultDTO toCommentResultDTO(Comment comment) {
+        return HistoryResponseDTO.CommentResultDTO.builder()
+                .commentId(comment.getId())
+                .build();
+    }
+
+    public static HistoryResponseDTO.CommentWithRepliesDTO toCommentWithRepliesDTO(Comment parent,List<Comment> replies) {
+        Member member = parent.getMember();
+
+        return HistoryResponseDTO.CommentWithRepliesDTO.builder()
+                .commentId(parent.getId())
+                .nickname(member.getNickname())
+                .clokeyId(member.getClokeyId())
+                .imageUrl(member.getProfileUrl())
+                .content(parent.getContent())
+                .replyResults(toReplyDTOs(replies))
+                .build();
+    }
+
+    public static List<HistoryResponseDTO.CommentWithRepliesDTO.ReplyDTO> toReplyDTOs(List<Comment> replies) {
+        return replies.stream()
+                .map(reply -> {
+                    Member member = reply.getMember();
+                    return HistoryResponseDTO.CommentWithRepliesDTO.ReplyDTO.builder()
+                            .commentId(reply.getId())
+                            .nickname(member.getNickname())
+                            .clokeyId(member.getClokeyId())
+                            .imageUrl(member.getProfileUrl())
+                            .content(reply.getContent())
+                            .build();
+                }).toList();
+    }
+
+    public static HistoryResponseDTO.CommentsPageDTO toCommentsPageDTO(
+            Page<Comment> parentPage,
+            Map<Long, List<Comment>> replyMap
+    ) {
+        List<HistoryResponseDTO.CommentWithRepliesDTO> commentDTOs = parentPage.getContent().stream()
+                .map(parent -> {
+                    List<Comment> replies = replyMap.getOrDefault(parent.getId(), List.of());
+                    return toCommentWithRepliesDTO(parent, replies);
+                })
+                .toList();
+
+        return HistoryResponseDTO.CommentsPageDTO.builder()
+                .comments(commentDTOs)
+                .totalPage(parentPage.getTotalPages())
+                .totalElements(parentPage.getTotalElements())
+                .isFirst(parentPage.isFirst())
+                .isLast(parentPage.isLast())
+                .build();
+    }
+
 }
