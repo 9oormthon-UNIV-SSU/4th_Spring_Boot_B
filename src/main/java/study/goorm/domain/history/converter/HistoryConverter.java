@@ -1,8 +1,8 @@
 package study.goorm.domain.history.converter;
 
-import study.goorm.domain.cloth.domain.entity.Cloth;
+
+import study.goorm.domain.history.domain.entity.Comment;
 import study.goorm.domain.history.domain.entity.History;
-import study.goorm.domain.history.domain.entity.Hashtag;
 import study.goorm.domain.history.dto.HistoryRequestDTO;
 import study.goorm.domain.history.dto.HistoryResponseDTO;
 import study.goorm.domain.member.domain.entity.Member;
@@ -55,14 +55,14 @@ public class HistoryConverter {
 
     }
 
-    public static HistoryRequestDTO.HistoryCreateRequest toHistoryCreateRequest(
-            History history,List<Long> clothes, List<String> hashtags
-    ) {
-        return HistoryRequestDTO.HistoryCreateRequest.builder()
-                .content(history.getContent())
-                .clothes(clothes)
-                .hashtags(hashtags)
-                .date(history.getHistoryDate().toString())
+
+    //코드 참고
+    public static History toHistoryEntity(HistoryRequestDTO.HistoryCreateRequest historyRequestDTO,Member member) {
+        return History.builder()
+                .member(member)
+                .historyDate(historyRequestDTO.getDate())
+                .likes(0)
+                .content(historyRequestDTO.getContent())
                 .build();
     }
 
@@ -75,22 +75,96 @@ public class HistoryConverter {
                 .build();
     }
 
-    public static HistoryRequestDTO.HistoryUpdateRequest toHistoryUpdateRequest(History history) {
-        return HistoryRequestDTO.HistoryUpdateRequest.builder()
+
+
+    public static HistoryResponseDTO.HistoryUpdateResult toHistoryUpdateResult(History history){
+        return HistoryResponseDTO.HistoryUpdateResult.builder()
                 .historyId(history.getId())
                 .build();
     }
 
 
 
-    public static HistoryResponseDTO.HistoryUpdateResult toHistoryUpdateResult(
-            History history, List<Long> clothes, List<String> hashtags, Visibility visibility) {
-        return HistoryResponseDTO.HistoryUpdateResult.builder()
+    //안쓰이나 남겨둠
+    public static HistoryRequestDTO.HistoryCreateRequest toHistoryCreateRequest(
+            History history,List<Long> clothes, List<String> hashtags
+    ) {
+        return HistoryRequestDTO.HistoryCreateRequest.builder()
                 .content(history.getContent())
                 .clothes(clothes)
                 .hashtags(hashtags)
-                .visibility(visibility)
+                .date(history.getHistoryDate())
                 .build();
     }
+
+
+    //안쓰이나 남겨둠
+    public static HistoryRequestDTO.HistoryUpdateRequest toHistoryUpdateRequest(
+            History history, List<Long> clothes, List<String> hashtags, Visibility visibility) {
+        return HistoryRequestDTO.HistoryUpdateRequest.builder()
+                .content(history.getContent())
+                .clothes(clothes)
+                .hashtags(hashtags)
+                .visibility(visibility.toString())
+                .build();
+    }
+
+    public static HistoryResponseDTO.LikeResult toHistoryLikeResult(
+            History history,boolean newState, Long likeCount
+
+    ){
+        return HistoryResponseDTO.LikeResult.builder()
+                .historyId(history.getId())
+                .isLiked(newState)
+                .likeCount(likeCount)
+                .build();
+
+    }
+
+    public static HistoryResponseDTO.LikedUser toHistoryLikedUser(
+        Member member, boolean me, boolean followStatus
+    ){
+        return HistoryResponseDTO.LikedUser.builder()
+                .memberId(member.getId())
+                .clokeyId(member.getClokeyId())
+                .nickName(member.getNickname())
+                .imageUrl(member.getProfileImageUrl())
+                .me(me)
+                .followStatus(followStatus)
+                .build();
+
+    }
+
+    public static HistoryResponseDTO.LikedUsersResult toLikedUsersResult(
+            List<HistoryResponseDTO.LikedUser> likedUsers
+    ){
+
+        return HistoryResponseDTO.LikedUsersResult.builder()
+                .likedUsers(likedUsers)
+                .build();
+
+    }
+
+
+    public static HistoryResponseDTO.writeCommentResult toHistoryWriteCommentResult(
+        Comment comment
+    ){
+        return HistoryResponseDTO.writeCommentResult.builder()
+                .commentId(comment.getId())
+                .build();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

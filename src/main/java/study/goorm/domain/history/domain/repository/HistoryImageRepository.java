@@ -26,6 +26,7 @@ public interface HistoryImageRepository extends JpaRepository<HistoryImage, Long
     )
 """)
     List<HistoryImage> findFirstImagesByHistoryIds(@Param("historyIds") List<Long> historyIds);
+    void deleteAllByHistoryId(Long historyId);
 
 
 }

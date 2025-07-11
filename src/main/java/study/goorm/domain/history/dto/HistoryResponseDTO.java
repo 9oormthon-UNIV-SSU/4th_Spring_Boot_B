@@ -1,15 +1,15 @@
 package study.goorm.domain.history.dto;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import study.goorm.domain.cloth.domain.entity.ClothImage;
-import study.goorm.domain.history.domain.entity.History;
-import study.goorm.domain.model.enums.Visibility;
+
+
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class HistoryResponseDTO {
@@ -72,11 +72,74 @@ public class HistoryResponseDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class HistoryUpdateResult{
-        private String content;
-        private List<Long> clothes;
-        private List<String> hashtags;
-        private Visibility visibility;
+        private Long historyId;
+
     }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikeResult{
+        private Long historyId;
+        private boolean isLiked;
+        private long likeCount;
+    }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikedUser{
+        private Long memberId;
+        private String clokeyId;
+        private String nickName;
+        private boolean followStatus;
+        private String imageUrl;
+        private Boolean me;
+
+    }
+
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LikedUsersResult{
+        private List<LikedUser> likedUsers;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class writeCommentResult{
+        private Long commentId;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class HistoryCommentProjectionDTO {
+        private Long commentId;
+        private String content;
+        private boolean isRoot;
+        private Long parentId;
+        private String clokeyId;
+        private String nickname;
+        private String profileImageUrl;
+        private LocalDateTime createdAt;
+    }
+
+
+
+
+
+
+
+
 
 
 }

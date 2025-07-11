@@ -26,3 +26,8 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.springframework.jdbc.core: DEBUG
+#minio:
+#  url:http://localhost:9000
+#  access-key:
+#  secret-key:
+#  bucket:

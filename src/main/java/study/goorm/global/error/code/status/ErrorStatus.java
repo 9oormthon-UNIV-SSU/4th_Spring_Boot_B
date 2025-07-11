@@ -36,9 +36,34 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //History
     NO_SUCH_HISTORY(HttpStatus.NOT_FOUND, "HISTORY_4002","존재하지 않는 기록ID입니다"),
+    //hyowon
+    INVALID_HISTORY_DATE_FORTMAT(HttpStatus.BAD_REQUEST,"HISTORY_4001","잘못된 날짜 형식입니다."),
+    EMPTY_HISTORY_IMAGE(HttpStatus.BAD_REQUEST,"HISTORY_4004","기록의 이미지는 필수입니다."),
+    EMPTY_CLOTH(HttpStatus.BAD_REQUEST,"CLOTH_4005","등록할 옷이 비어있습니다."),
+    DUPLICATE_CLOTH(HttpStatus.BAD_REQUEST,"CLOTH_4006","중복되는 옷이 있습니다."),
+    INVALID_CLOTH(HttpStatus.BAD_REQUEST,"CLOTH_4007","존재하지 않거나 소유하지 않은 옷id입니다."),
 
     NO_AUTHORITY_HISTORY(HttpStatus.FORBIDDEN,"HISTORY_4006","기록에 접근 권한이 없습니다."),
-    NO_SUCH_HISTORY_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","존재하지 않는 ID멤버입니다.");
+    NO_SUCH_HISTORY_MEMBER(HttpStatus.BAD_REQUEST,"MEMBER_4001","존재하지 않는 ID멤버입니다."),
+    CONTENT_LENGTH_EXCEEDED(HttpStatus.BAD_REQUEST,"HISTORY_4007","내용은 200자 초과 불과합니다"),
+    TOO_MANY_IMAGES(HttpStatus.BAD_REQUEST,"HISTORY_4008","이미지는 최대 10장까지만 업로드할 수 있습니다."),
+
+
+    //Like
+    LIKE_STATE_MISMATCH(HttpStatus.BAD_REQUEST,"LIKE_4001","유효하지 않은 좋아요상태입니다"),
+    LIKE_NOT_FOUND(HttpStatus.BAD_REQUEST,"LIKE_4002","Like를 찾지 못했습니다."),
+
+    //HASHTAG
+    EMPTY_HASHTAGS(HttpStatus.BAD_REQUEST,"HASHTAG_4001","해쉬태그가 없습니다."),
+    DUPLICATE_HASHTAGS(HttpStatus.BAD_REQUEST,"HASHTAG_4002","중복되는 해시태그가 있습니다."),
+
+
+    COMMENT_CONTENT_EMPTY(HttpStatus.BAD_REQUEST,"COMMENT_4001","댓글이 비어있습니다."),
+    COMMENT_CONTENT_TOO_LONG(HttpStatus.BAD_REQUEST,"COMMENT_4002","댓글 글자수 초과입니다."),
+    ;
+
+
+
 
 
     private final HttpStatus httpStatus;

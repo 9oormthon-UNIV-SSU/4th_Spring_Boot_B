@@ -37,4 +37,12 @@ public class History extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
 }

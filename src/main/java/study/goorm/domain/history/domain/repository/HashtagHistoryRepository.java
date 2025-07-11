@@ -10,4 +10,5 @@ public interface HashtagHistoryRepository extends JpaRepository<HashtagHistory, 
     List<HashtagHistory> findAllByHistory_Id(Long historyId);
 
     void deleteAllByHistory(History history);
+    void deleteAllByHistoryId(Long historyId);
 }
