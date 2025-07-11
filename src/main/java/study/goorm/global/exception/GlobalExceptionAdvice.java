@@ -3,7 +3,8 @@ package study.goorm.global.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.TypeMismatchException;
+
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -28,18 +29,17 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = {RestController.class})
 public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
 
-
     //주석처리한 코드는 override가 안됨, getPropertyName()도 문제가 있음
-//    @Override
-//    protected ResponseEntity<Object> handleTypeMismatch(
-//            TypeMismatchException e,
-//            HttpHeaders headers,
-//            HttpStatusCode status,
-//            WebRequest request) {
-//        String errorMessage = e.getPropertyName() + ": 올바른 값이 아닙니다.";
-//
-//        return handleExceptionInternalMessage(e, headers, request, errorMessage);
-//    }
+    @Override
+    protected ResponseEntity<Object> handleTypeMismatch(
+            TypeMismatchException e,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+        String errorMessage = e.getPropertyName() + ": 올바른 값이 아닙니다.";
+
+        return handleExceptionInternalMessage(e, headers, request, errorMessage);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
@@ -77,7 +77,7 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
             WebRequest request) {
 
         Map<String, String> errors = new LinkedHashMap<>();
-
+        //필드에러처리
         e.getBindingResult().getFieldErrors().stream()
                 .forEach(
                         fieldError -> {
@@ -94,6 +94,18 @@ public class GlobalExceptionAdvice extends ResponseEntityExceptionHandler {
                                     (existingErrorMessage, newErrorMessage) ->
                                             existingErrorMessage + ", " + newErrorMessage);
                         });
+        //클래스 레벨 에러 처리(ObjectError)
+        e.getBindingResult().getGlobalErrors().forEach(objectError ->{
+            String objectName=objectError.getObjectName();
+            String errorMessage;
+            try{
+                errorMessage = Optional.ofNullable(ErrorStatus.valueOf(objectError.getDefaultMessage()).getMessage()).orElse("");
+            } catch (IllegalArgumentException ex) {
+                errorMessage = Optional.ofNullable(ErrorStatus.valueOf(objectError.getDefaultMessage()).getMessage()).orElse("");
+            }
+            errors.merge("message :",errorMessage,
+                    (existingErrorMessage, newErrorMessage) ->existingErrorMessage+ ", " + newErrorMessage);
+        } );
 
         return handleExceptionInternalArgs(
                 e, HttpHeaders.EMPTY, ErrorStatus.valueOf("_BAD_REQUEST"), request, errors);
